@@ -56,4 +56,14 @@ public class Node
 	{
 		data = dat;
 	}
+	
+	/**
+	 * method to set a child of a Node
+	 * @param num
+	 * @param child
+	 */
+	public void setChild(int num, Node child)
+	{
+		children[num] = child;
+	}
 }

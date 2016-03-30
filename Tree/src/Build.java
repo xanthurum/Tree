@@ -9,11 +9,12 @@ public class Build
 	
 	public Build(int totalChar, char[] chrs)
 	{
+		chars = chrs;
 		totalChars = totalChar;
 		root = new Node(totalChars);
 		permutations = permutations(totalChars);
 		printPermutations();
-		
+		build();
 	}
 	
 	
@@ -29,6 +30,17 @@ public class Build
 		{
 			return (total * permutations(total -1));
 		}
+	}
+	/**
+	 * method who actually builds a new tree made of nodes
+	 */
+	private void build()
+	{
+		for(int i = 0; i < totalChars; i++)
+		{
+			root.setChild(i,new Node(root, (permutations/totalChars), chars[i]));
+		}
+		
 	}
 	/**
 	 * prints out the number of permutations

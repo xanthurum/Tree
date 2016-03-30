@@ -35,7 +35,6 @@ public class Tree extends JFrame implements KeyListener
 	{
 		
 		Tree tree = new Tree();
-
 	}
 	/**
 	 * KeyEvent method to get all necessary parameters to make a new build
