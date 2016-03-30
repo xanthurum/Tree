@@ -9,6 +9,7 @@ public class Build
 	
 	public Build(int totalChar, char[] chrs)
 	{
+		totalChars = totalChar;
 		root = new Node(totalChars);
 		permutations = permutations(totalChars);
 		printPermutations();
@@ -26,7 +27,7 @@ public class Build
 		if(total == 1) return permutations * 1;
 		else
 		{
-			return (permutations * permutations(total -1));
+			return (total * permutations(total -1));
 		}
 	}
 	/**
@@ -34,7 +35,7 @@ public class Build
 	 */
 	private void printPermutations()
 	{
-		System.out.println("the total number of permutations = " + permutations);
+		System.out.println("The total number of permutations are " + permutations);
 	}
 }
      
