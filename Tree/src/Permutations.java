@@ -16,7 +16,7 @@ public class Permutations
 	
 	/**
 	 * method to make the permutations
-	 * @author Crunchify.com
+	 * @author idea from Crunchify.com 
 	 * @param string
 	 * @return the whole set of permutations
 	 */
@@ -46,7 +46,7 @@ public class Permutations
 	}
 	/**
 	 * method to construct a permutation
-	 * @author Crunchify.com
+	 * @author idea from Crunchify.com
 	 * @param str
 	 * @param c
 	 * @param j

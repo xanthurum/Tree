@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class Node 
 {
@@ -6,7 +5,12 @@ public class Node
 	private Node parent;
 	private Node[] children;
 	private char data;
-	
+	/**
+	 * constructor for de Node class
+	 * @param par
+	 * @param child
+	 * @param dat
+	 */
 	public Node(Node par, int child, char dat)
 	{
 		parent = par;
