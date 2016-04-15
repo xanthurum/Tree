@@ -3,7 +3,7 @@
 public class Build 
 {
 
-	private Node root;
+	private Make tree;
 	private int totalChars, permutations = 1;
 	private char[] chars;
 	/**
@@ -14,11 +14,11 @@ public class Build
 	public Build(int totalChar, char[] chrs)
 	{
 		chars = chrs;
-		totalChars = totalChar;
-		root = new Node(totalChars);
+		totalChars = totalChar; 
 		permutations = permutations(totalChars);
 		printPermutations();
-		build();
+		//build();
+		tree = new Make(totalChars, permutations, chars);
 	}
 	
 	
@@ -39,7 +39,7 @@ public class Build
 	 * method who actually builds a new tree made of nodes
 	 * and meanwhile prints out the permutations for every root child
 	 */
-	private void build()
+	/*private void build()
 	{
 		for(int i = 0; i < totalChars; i++) //makes the children for the root
 		{
@@ -70,7 +70,7 @@ public class Build
 				}
 			System.out.println();
 			}
-		}
+		}*/
 	
 	/**
 	 * 	method to make a correct string out of all the chars minus the one at place num
