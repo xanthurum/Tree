@@ -1,176 +1,254 @@
 
 public class Make 
 {
-	private Node root, temp;
-	private char[] charArray;
-	private int totalChars, permutations, check, base, num, index;
-	private StringBuilder string;
-	/*
+	private Node root;
+	private char[] charArray, tempArray;
+	private int totalChars, check, printInterval, permutations;
+	/**
 	 * constructor to make a new build
 	 * a tree suitable for all the permutations
 	 */
-	public Make(int totalCh, int permu, char[] chars)
+	public Make(int permuta, char[] chars)
 	{
-		num = 0; base = 0; index = 0;
-		root = new Node(totalCh, num);
-		totalChars = totalCh;
-		check = totalChars;
-		permutations = permu;
-		string = new StringBuilder(totalChars);
+		check = 0; printInterval = 50; permutations = permuta;
+		charArray = chars;
+		totalChars = charArray.length;
+		root = new Node(totalChars);
 		construct();
-		//print();
+		fill();
+		print();
 	}
-	
+	/**
+	 * method to construct a permutation tree
+	 */
 	private void construct()
 	{
 		for(int i = 0; i < totalChars; i++)
 		{
-			System.out.println("first node " + i );
-			root.setChild(i, add(root, root.getChild(i)));
-			System.out.println("construct, data = " + root.getChild(i).getData());
+			add(i);
 		}
 	}
 	/**
-	 * method to add a the number of nodes untill a Node has no children anymore
-	 * @param parent
-	 * @return a new Node
+	 * recursive method to add all the following nodes from a node
+	 * @param an array number from the root its children array
 	 */
-	private Node add(Node parent, Node child)
+	private void add(int number)
 	{
-		if(child != null) System.out.println("last child passed data = " + child.getData());
+		Node child;
+		
+		root.setChild(number, new Node(root, totalChars-1));
+		child = root.getChild(number);
 		
 		while(child != root)
 		{
-			if(child == null && parent == root)
+			if(child.getTotalChildren() == 1)
 			{
-				temp = new Node(root, totalChars-1, ++num);
-				temp.setChild(temp.getCount(), new Node(temp, temp.getTotalChildren()-1, ++num));
-				temp.setCount(temp.getCount()+1);
-				System.out.println("node temp, totalChildren = " + temp.getTotalChildren() + " count = " + temp.getCount() + " data = " + temp.getData() + " data child = " + temp.getChild(temp.getCount()-1).getData());
-				add(temp, temp.getChild(temp.getCount()-1));
+				child.setChild(child.getCount(), new Node(child));
+				child.setCount(child.getCount()+1);
+				while(child.getCount() == child.getTotalChildren())
+				{
+					child.setCount(0);
+					child = child.getParent();
+				}
 			}
 			else
 			{
-				if (parent.getTotalChildren() == 1) 
-				{
-					child.setChild(0, new Node(child, ++num));
-					System.out.println("node null and child null, count = " + child.getCount() + " data = " + child.getData());
-				
-					System.out.println("temporaryParent count = " + parent.getCount() + " temporaryParent data = " + parent.getData());
-					parent.setCount(parent.getCount()+1);
-					System.out.println("temporaryParent new count = " + parent.getCount() + " temporaryParent data = " + parent.getData() + " base = " + base);
-					testReset(child);
-					
-					if (base <= 0) 
-						{
-						 	add(null,child);
-						 	return temp;
-						}
-					
-					for(int i = 0; i < base; i++)
-							{
-								child = child.getParent();
-							}
-					base = 0;
-					System.out.println("new child data = " + child.getData() + " count = " + child.getCount());
-					add(child.getParent(), child);
-					
-				}			 
-				else
-				{
-					System.out.println("child totalChildren = " + child.getTotalChildren() + " child data = " + child.getData());
-					if(child.getTotalChildren() > 1)
-					{
-						child.setChild(child.getCount(), new Node(child, child.getTotalChildren()-1, ++num));
-						child.setCount(child.getCount()+1);
-						System.out.println("node null, totalChildren = " + child.getTotalChildren() + " new count = " + child.getCount() + " data = " + child.getData());
-						if(child.getTotalChildren() <= 2) add(child, child.getChild(child.getCount()-1));
-						else add(child, child.getChild(child.getCount()-1));
-					}
-					else
-					{
-						child.setChild(child.getCount(), new Node(child, child.getTotalChildren(), ++num));
-						System.out.println("node null, totalChildren = " + child.getTotalChildren() + " count = " + child.getCount() + " data = " + child.getData());
-						add(child, child.getChild(child.getCount()));
-					}
-				}
+				child.setChild(child.getCount(), new Node(child, (child.getTotalChildren()-1)));
+				child.setCount(child.getCount()+1);
+				child = child.getChild(child.getCount()-1);
 			}
 		}
-		return temp;		
-	}
-	
-	private int testReset(Node parent)
-	{
-		if(parent == root)
-		{
-			return -1;
-		}
-		else
-		if(parent.getTotalChildren() == 1 || parent.getCount() >= parent.getTotalChildren())
-		{
-			parent.setCount(0);
-			base++;
-			System.out.println("testReset() parent.getData.If = " + parent.getData() + " base = " + base);
-			testReset(parent.getParent());
-		}
-		else
-			System.out.println("testReset() parent.getData = " + parent.getData() + " base = " + base);
-			//parent.setCount(parent.getCount()+1);
-			return base;
 	}
 	/**
-	 * method to print the tree
+	 * method to fill the complete tree with all the chars
+	 * needed to form all permutations
+	 */
+	private void fill()
+	{
+		fillBase();
+		for(int i = 0; i < root.getTotalChildren(); i++)
+		{
+			Node child = root.getChild(i);
+			fillOther(child);
+		}
+	}
+	/**
+	 * method to fill the base row of the tree
+	 * this makes it possible to calculate tempArray for every node its children
+	 */
+	private void fillBase()
+	{
+		tempArray = charArray;
+		
+		for(int i = 0; i < root.getTotalChildren(); i++)
+		{
+			Node child = root.getChild(i);
+			child.setData(charArray[i]);
+		}
+	}
+	/**
+	 * recursive method to fill all nodes under a node
+	 * @param a node
+	 */
+	private void fillOther(Node child)
+	{	
+		while(child != root)
+		{
+			if(child.getTotalChildren() == 2)
+			{
+				getCharArray(child);
+				tail(child);
+				child.setCount(child.getCount()+2);
+				while(child.getCount() >= child.getTotalChildren())
+				{
+					child.setCount(0);
+					child = child.getParent();
+				}
+				if(child != root)
+				{
+					child.setCount(child.getCount()+1);
+					child = child.getChild(child.getCount()-1);
+				}
+			}
+			else
+			{
+				getCharArray(child);
+				for(int i = 0; i < child.getTotalChildren(); i++)
+				{
+					child.getChild(i).setData(tempArray[i]);
+				}
+				child.setCount(child.getCount()+1);
+				child = child.getChild(child.getCount()-1);
+			}
+		}
+	}
+	/**
+	 * method to calculate the charArray for a node its children
+	 * @param a node
+	 */
+	private void getCharArray(Node child)
+	{
+		if(child.getParent() == root)
+		{
+			tempArray = charArray;
+			deleteChar(child.getData());
+		}
+		else
+		{
+			getParentChildrenArray(child);
+			deleteChar(child.getData());
+		}		
+	}
+	/**
+	 * method to make an array of the data from a node its children
+	 * @param a node
+	 */
+	private void getParentChildrenArray(Node child)
+	{
+		tempArray = new char[child.getParent().getTotalChildren()];
+		for(int i = 0; i < child.getParent().getTotalChildren(); i++)
+		{
+			tempArray[i] = child.getParent().getChild(i).getData();
+		}
+	}
+	/**
+	 * method to fill a tail from the tree
+	 * @param a node
+	 * @param a pair of chars
+	 */
+	private void tail(Node parent)
+	{
+		parent.getChild(0).setData(tempArray[0]);
+		parent.getChild(0).getChild(0).setData(tempArray[1]);
+		parent.getChild(1).setData(tempArray[1]);
+		parent.getChild(1).getChild(0).setData(tempArray[0]);	
+	}
+	/**
+	 * method to delete a char from an array
+	 * @param the char to be deleted
+	 */
+	private void deleteChar(char cha)
+	{
+		char[] temporary = new char[tempArray.length-1];
+		int tempo = 0;
+		for(int i = 0; i < tempArray.length; i++)
+		{
+			if(tempArray[i] != cha) 
+			{
+				temporary[tempo] = tempArray[i];
+				tempo++;
+			}
+		}
+		tempArray = temporary;
+	}
+	
+	/**
+	 * method to print the whole tree
 	 */
 	private void print()
 	{
-		for(int i = 0; i < totalChars; i++)
+		tempArray = new char[charArray.length];
+		for(int i = 0; i < root.getTotalChildren(); i++)
 		{
-			System.out.print("The permutations from rootChild["+i+"] are : ");
-			string.append(root.getChild(i).getData());	
-			getString(root.getChild(i));
-			string.delete(0,totalChars-1);
+			Node child = root.getChild(i);
+			System.out.print("The permutations for char '" + child.getData() + "' are : ");
+			printOther(0, child);
+			System.out.println();
+		}
+		System.out.println("The total of printed permutations vs calculated permutations = " + check + "/" + permutations);
+	}
+	/**
+	 * recursive method to get all data ready to print
+	 * and printed once a permutation is complete
+	 * @param a child node from the root
+	 */
+	private void printOther(int interval, Node child)
+	{	
+		if(child != root)
+		{
+			if(child.getTotalChildren() == 2)
+			{
+				tempArray[totalChars-child.getParent().getTotalChildren()] = child.getData();
+				tempArray[tempArray.length-2] = child.getChild(0).getData();
+				tempArray[tempArray.length-1] = child.getChild(0).getChild(0).getData();
+				printTempArray();
+				System.out.print(" ");
+				tempArray[tempArray.length-2] = child.getChild(1).getData();
+				tempArray[tempArray.length-1] = child.getChild(1).getChild(0).getData();
+				printTempArray();
+				System.out.print(" ");
+				child.setCount(child.getCount()+2);
+				check = check +2; interval = interval +2;
+				if(interval == printInterval)
+				{
+					interval = 0;
+					System.out.println();
+					System.out.print("                                    ");
+				}
+				while(child.getCount() == child.getTotalChildren())
+				{
+					child.setCount(0);
+					child = child.getParent();
+				}
+				printOther(interval, child);
+			}
+			else
+			{
+				tempArray[totalChars-child.getParent().getTotalChildren()] = child.getData();
+				child.setCount(child.getCount()+1);
+				child = child.getChild(child.getCount()-1);
+				printOther(interval, child);
+			}
 		}
 	}
-	
-	private void getString(Node parent)
+	/**
+	 * method to print tempArray
+	 */
+	private void printTempArray()
 	{
-		if(parent.getCount() == parent.getTotalChildren() && parent.getParent() == root)
+		for(int i = 0; i < tempArray.length; i++)
 		{
-			parent.setCount(-1);
-		}
-		else
-			if(parent.getCount() == parent.getTotalChildren())
-			{
-				parent.setCount(-1);
-				getString(parent.getParent().getChild(parent.getParent().getCount()));
-			}
-		else
-			if(parent.getTotalChildren() > 1)
-			{
-				temp = parent;
-				string.append(parent.getData());
-				index ++;
-				temp.setCount(parent.getCount()+1);
-				if(parent.getParent() == root) base ++;
-				getString(parent.getChild(parent.getCount()-1));
-			}
-		else
-			if(parent.getTotalChildren() == 1)
-			{
-				string.append(parent.getData());
-				index++;
-				getString(parent.getChild(0));
-			}
-		else
-			if(parent.getChildren() == null)
-			{
-				string.append(parent.getData());
-				index++;
-				System.out.print(string + " ");
-				string.delete(index-2, index);
-				index = index-2;
-				getString(parent.getParent().getParent().getChild(parent.getParent().getParent().getCount()));
-			}
-				
+			System.out.print(tempArray[i]);
+		}		
 	}
 }

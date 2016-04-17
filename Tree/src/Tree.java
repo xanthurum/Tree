@@ -64,7 +64,7 @@ public class Tree extends JFrame implements KeyListener
 		
 	}
 	/**
-	 * The build method waits until all chars are been get to make a new build
+	 * The build method waits until all chars are been set to make a new build
 	 */
 	private void build()
 	{

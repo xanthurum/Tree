@@ -5,40 +5,37 @@ public class Node
 	private Node parent;
 	private Node[] children;
 	private int totalOfChildren, count = 0;
-	private int data;
+	private char data;
 	/**
 	 * constructor for a Node 
 	 * @param parent
 	 * @param totalChildren (number of children)
 	 * @param data
 	 */
-	public Node(Node par, int totalChildren, int dat)
+	public Node(Node par, int totalChildren)
 	{
 		totalOfChildren = totalChildren;
 		parent = par;
 		children = new Node[totalChildren];
-		data = dat;
 	}
 	/**
 	 * constructor for a root Node
 	 * @param totalChildren  (number of children)
 	 */
-	public Node(int totalChildren, int dat)
+	public Node(int totalChildren)
 	{
 		totalOfChildren = totalChildren;
 		parent = null;
 		children = new Node[totalChildren];
-		data = dat;
 	}
 	/**
-	 * constructor for a end Node
+	 * constructor for an end Node
 	 * @param parent
 	 */
-	public Node(Node par, int dat)
+	public Node(Node par)
 	{
 		parent = par;
 		children = null;
-		data = dat;
 	}
 	/**
 	 * method to get the parent of a Node
@@ -50,8 +47,8 @@ public class Node
 	}
 	/**
 	 * method to get the particular child of a Node
-	 * @param number of child
-	 * @return Node child
+	 * @param placenumber of node in a children array
+	 * @return that specific child node 
 	 */
 	public Node getChild(int number)
 	{
@@ -61,13 +58,13 @@ public class Node
 	 *method to get the data of a Node
 	 * @return the data of the Node
 	 */
-	public int getData()
+	public char getData()
 	{
 		return data;
 	}
 	/**
 	 * method to get the count
-	 *  a help number while filling or printing the tree
+	 *  a helping number while filling or printing the tree
 	 * @return count
 	 */
 	public int getCount()
@@ -94,10 +91,15 @@ public class Node
 	 * method to set the data of a Node
 	 * @param char data
 	 */
-	public void setData(int dat)
+	public void setData(char dat)
 	{
 		data = dat;
 	}
+	/**
+	 * method to set the count
+	 * count a helping number while filling or printing the tree
+	 * @param number
+	 */
 	public void setCount(int number)
 	{
 		count = number;
