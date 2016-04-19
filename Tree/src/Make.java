@@ -1,22 +1,24 @@
+import java.io.PrintStream;
 
 public class Make 
 {
 	private Node root;
 	private char[] charArray, tempArray;
-	private int totalChars, check, printInterval, permutations;
+	private int totalChars, check, printInterval, permutations, level;
 	/**
 	 * constructor to make a new build
 	 * a tree suitable for all the permutations
 	 */
 	public Make(int permuta, char[] chars)
 	{
-		check = 0; printInterval = 50; permutations = permuta;
+		level = 0; check = 0; printInterval = 50; permutations = permuta;
 		charArray = chars;
 		totalChars = charArray.length;
 		root = new Node(totalChars);
 		construct();
 		fill();
-		print();
+		printPermutations();
+		printCombinations();
 	}
 	/**
 	 * method to construct a permutation tree
@@ -183,9 +185,9 @@ public class Make
 	}
 	
 	/**
-	 * method to print the whole tree
+	 * method to print all the permutations for all chars
 	 */
-	private void print()
+	private void printPermutations()
 	{
 		tempArray = new char[charArray.length];
 		for(int i = 0; i < root.getTotalChildren(); i++)
@@ -198,8 +200,8 @@ public class Make
 		System.out.println("The total of printed permutations vs calculated permutations = " + check + "/" + permutations);
 	}
 	/**
-	 * recursive method to get all data ready to print
-	 * and printed once a permutation is complete
+	 * recursive method to get all data ready to print the permutations for each char
+	 * once a permutation is complete its been printed
 	 * @param a child node from the root
 	 */
 	private void printOther(int interval, Node child)
@@ -242,6 +244,74 @@ public class Make
 		}
 	}
 	/**
+	 * method to print all possible combinations
+	 */
+	private void printCombinations()
+	{
+		for(int i = 2; i < totalChars; i++)
+		{
+			check = 0;
+			System.out.println("All combinations with " + i + " chars are : ");
+			for(int j = 0; j < totalChars; j++)
+			{
+				tempArray = new char[i];
+				Node child = root.getChild(j);
+				System.out.print("The combinations for Char '" + child.getData() + "' are : ");
+				level = 1;
+				combinations(0, i, child);
+				System.out.println();
+			}
+			System.out.println("The total of printed combinations for " + i + " chars vs the calculated combinations = " + check + "/" + permutations);
+		}
+	}
+	/**
+	 * recursive method to get all data ready to print the combinations for each char
+	 * once a combination is complete its been printed
+	 * @param the of chars a combination is made of
+	 * @param a child node from the root
+	 */
+	private void combinations(int interval, int numOfComb, Node child)
+	{
+		if(child != root)
+		{
+			if(level == numOfComb)
+			{
+				for(int i = 0; i < child.getParent().getTotalChildren(); i++)
+				{
+					tempArray[totalChars-child.getParent().getTotalChildren()] = child.getParent().getChild(i).getData();
+					printTempArray();
+					System.out.print(" ");
+					interval++; check++;
+					child.getParent().setCount(child.getParent().getCount()+1);
+					if(interval == printInterval)
+					{
+						interval = 0;
+						System.out.println();
+						System.out.print("                                    ");
+					}
+				}
+				child = child.getParent();
+				level--;
+				while(child.getCount() >= child.getTotalChildren())
+				{
+					child.setCount(0);
+					child = child.getParent();
+					level--;
+				}
+				combinations(interval, numOfComb, child);
+			}
+			else
+			{
+				tempArray[totalChars-child.getParent().getTotalChildren()] = child.getData();
+				child.setCount(child.getCount()+1);
+				child = child.getChild(child.getCount()-1);
+				level++;
+				combinations(interval, numOfComb, child);
+			}
+		}
+		
+	}
+	/**
 	 * method to print tempArray
 	 */
 	private void printTempArray()
@@ -249,6 +319,6 @@ public class Make
 		for(int i = 0; i < tempArray.length; i++)
 		{
 			System.out.print(tempArray[i]);
-		}		
+		}
 	}
 }
