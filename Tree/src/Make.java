@@ -195,55 +195,14 @@ public class Make
 		{
 			Node child = root.getChild(i);
 			System.out.print("The permutations for char '" + child.getData() + "' are : ");
-			printOther(0, child);
+			//printOther(0, child);
+			level = 1;
+			combinations(0, totalChars, child);
 			System.out.println();
 		}
 		System.out.println("The total of printed permutations vs calculated permutations = " + check + "/" + permutations);
 	}
-	/**
-	 * recursive method to get all data ready to print the permutations for each char
-	 * once a permutation is complete its been printed
-	 * @param a child node from the root
-	 */
-	private void printOther(int interval, Node child)
-	{	
-		if(child != root)
-		{
-			if(child.getTotalChildren() == 2)
-			{
-				tempArray[totalChars-child.getParent().getTotalChildren()] = child.getData();
-				tempArray[tempArray.length-2] = child.getChild(0).getData();
-				tempArray[tempArray.length-1] = child.getChild(0).getChild(0).getData();
-				printTempArray();
-				System.out.print(" ");
-				tempArray[tempArray.length-2] = child.getChild(1).getData();
-				tempArray[tempArray.length-1] = child.getChild(1).getChild(0).getData();
-				printTempArray();
-				System.out.print(" ");
-				child.setCount(child.getCount()+2);
-				check = check +2; interval = interval +2;
-				if(interval == printInterval)
-				{
-					interval = 0;
-					System.out.println();
-					System.out.print("                                    ");
-				}
-				while(child.getCount() == child.getTotalChildren())
-				{
-					child.setCount(0);
-					child = child.getParent();
-				}
-				printOther(interval, child);
-			}
-			else
-			{
-				tempArray[totalChars-child.getParent().getTotalChildren()] = child.getData();
-				child.setCount(child.getCount()+1);
-				child = child.getChild(child.getCount()-1);
-				printOther(interval, child);
-			}
-		}
-	}
+
 	/**
 	 * method to print all possible combinations
 	 */
@@ -266,7 +225,7 @@ public class Make
 		}
 	}
 	/**
-	 * recursive method to get all data ready to print the combinations for each char
+	 * recursive method to get all data ready to print the combinations/permutations for each char
 	 * once a combination is complete its been printed
 	 * @param the of chars a combination is made of
 	 * @param a child node from the root
