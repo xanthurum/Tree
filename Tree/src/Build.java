@@ -2,9 +2,8 @@
 
 public class Build 
 {
-
-	private Make tree;
 	private int totalChars, permutations = 1;
+	private int[] combinations;
 	private char[] chars;
 	/**
 	 * the constructor of the Build class
@@ -15,9 +14,10 @@ public class Build
 	{
 		chars = chrs;
 		totalChars = totalChar; 
-		permutations = permutations(totalChars);
+		permutations = factorial(totalChars);
 		printPermutations();
-		tree = new Make(permutations, chars);
+		combinations();
+		Make tree = new Make(permutations, combinations, chars);
 	}
 	
 	
@@ -26,15 +26,25 @@ public class Build
 	 * @param total
 	 * @return #permutations
 	 */
-	private int permutations(int total)
+	private int factorial(int total)
 	{
-		if(total == 1) return permutations * 1;
+		if(total == 1) return 1;
 		else
 		{
-			return (total * permutations(total -1));
+			return (total * factorial(total -1));
 		}
 	}
-
+	private void combinations()
+	{
+		combinations = new int[totalChars-2];
+		int temp = totalChars-2;
+		for(int i = 2; i < totalChars; i++)
+		{
+			combinations[i-2] = (factorial(totalChars)/factorial(temp));
+			temp--;
+			System.out.println("combinations for : " + i + " chars are : " + combinations[i-2]);
+		}
+	}
 	/**
 	 * prints out the number of permutations
 	 */

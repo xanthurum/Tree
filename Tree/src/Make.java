@@ -1,19 +1,20 @@
-import java.io.PrintStream;
 
 public class Make 
 {
 	private Node root;
 	private char[] charArray, tempArray;
+	private int[] combinations;
 	private int totalChars, check, printInterval, permutations, level;
 	/**
 	 * constructor to make a new build
 	 * a tree suitable for all the permutations
 	 */
-	public Make(int permuta, char[] chars)
+	public Make(int permuta, int[] combi, char[] chars)
 	{
 		level = 0; check = 0; printInterval = 50; permutations = permuta;
 		charArray = chars;
 		totalChars = charArray.length;
+		combinations = combi;
 		root = new Node(totalChars);
 		construct();
 		fill();
@@ -261,7 +262,7 @@ public class Make
 				combinations(0, i, child);
 				System.out.println();
 			}
-			System.out.println("The total of printed combinations for " + i + " chars vs the calculated combinations = " + check + "/" + permutations);
+			System.out.println("The total of printed combinations for " + i + " chars vs the calculated combinations = " + check + "/" + combinations[i-2]);
 		}
 	}
 	/**
