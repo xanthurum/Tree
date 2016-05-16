@@ -47,14 +47,14 @@ public class Tree extends JFrame implements KeyListener
 		{
 			total = Character.getNumericValue(e.getKeyChar());
 			System.out.println("The total amount of chars will be : " + total);
-			System.out.println("Typ in your first caracter");
+			System.out.println("Typ in your first character");
 			chars = new char[total];
 		}
 		else if(keys != total)
 		{
 			chars[keys] = e.getKeyChar();
 			keys++;
-			if(keys != total) System.out.println("Typ in caracter number " + (keys + 1));
+			if(keys != total) System.out.println("Typ in character number " + (keys + 1));
 			if(keys == total)
 			{
 				event = true;
